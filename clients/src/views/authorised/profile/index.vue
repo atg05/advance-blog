@@ -9,7 +9,7 @@
         <div class="card">
           <div class="card-item">
             <span class="title">Posts</span>
-            <span>{{ userInfo.posts }}</span>
+            <span>{{ userInfo.userPosts?.length }}</span>
           </div>
           <div class="card-item">
             <span class="title">Followers</span>
@@ -23,7 +23,13 @@
       </div>
     </div>
     <div class="posts-container">
-      <Post v-for="post in userPosts" :key="post.id" :post="post" />
+      <!-- <Post v-for="post in userInfo?.userPosts" :key="post.id" :post="post" /> -->
+      <template v-if="userInfo?.userPosts.length > 0">
+        <Post v-for="post in userInfo?.userPosts" :key="post.id" :post="post" />
+      </template>
+      <template v-else>
+        <p>You haven't created any post...</p>
+      </template>
     </div>
   </div>
 </template>
@@ -52,12 +58,11 @@ export default {
   },
   methods: {
     async fetchUserInfo() {
-      console.log(this.user);
+      console.log(this.$route.params.id);
       try {
         const response = this.$route.params.id
           ? await axiosClient.get(`/user/${this.$route.params.id}`)
           : await axiosClient.get(`/user/${this.user.id}`);
-        console.log(response.data);
         this.userInfo = response.data;
       } catch (error) {
         console.log(error);
@@ -65,7 +70,13 @@ export default {
     },
     async fetchUserPosts() {
       try {
-        const response = await axiosClient.get(`/post/?userId=${this.user.id}`);
+        const response = this.$route.params.id
+          ? await axiosClient.get(
+              `/post/?onlyUserPost=true&userId=${this.$route.params.id}`,
+            )
+          : await axiosClient.get(
+              `/post/?onlyUserPost=true&userId=${this.user.id}`,
+            );
         this.userPosts = response.data;
       } catch (error) {
         console.log(error);

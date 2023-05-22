@@ -38,13 +38,33 @@ export const createPost = async (req, res) => {
 };
 
 export const getAllPosts = async (req, res) => {
-  const { userId } = req.query;
+  const { userId, onlyUserPost } = req.query;
+
+  const fetchPostsByAuthorId = async (authorId) => {
+    try {
+      const posts = await BlogPost.find({ authorId });
+      return posts;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
 
   try {
-    const posts = await BlogPost.find();
-    const postPromises = posts.map(async (post) => {
+    let posts = await BlogPost.find();
+
+    if (onlyUserPost) {
+      fetchPostsByAuthorId(userId)
+        .then((posts) => {
+          posts = posts;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    const postPromises = posts?.map(async (post) => {
       const authorDetails = await User.findById(post.authorId);
-      console.log(authorDetails);
       if (post._doc?.likes?.includes(userId)) {
         post._doc.liked = true;
       } else {
@@ -105,6 +125,8 @@ export const getAllPosts = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
+
+export const authorPosts = async (req, res) => {};
 
 // Controller function to READ a specific blog post by slug
 export const getPostBySlug = async (req, res) => {

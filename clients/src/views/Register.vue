@@ -4,7 +4,7 @@
   <div class="container">
     <span class="material-symbols-outlined user_account"> account_circle </span>
     <Heading :level="1"> Register Yourself Today</Heading>
-    <form @submit.prevent="registerUser">
+    <form @submit.prevent="registerUser" class="register-form">
       <InputField
         label="First Name"
         type="text"
@@ -124,5 +124,12 @@ input {
 button {
   width: 100%;
   background-color: var(--primary-color);
+}
+
+.register-form {
+  width: 100%;
+  display: flex;
+  gap: 1em;
+  flex-direction: column;
 }
 </style>

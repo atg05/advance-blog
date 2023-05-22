@@ -6,13 +6,11 @@ export function login({ commit }, data) {
   localStorage.setItem('isAuthenticated', true);
 }
 export function logout({ commit }) {
-  console.log('Logout Button Called');
   commit('setUser', {});
   localStorage.removeItem('isAuthenticated');
 }
 
 function setPosts({ commit }, userId) {
-  console.log('inside posts');
   axiosClient.get(`/post/?userId=${userId}`).then((response) => {
     commit('setPosts', response.data);
   });

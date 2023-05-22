@@ -19,8 +19,8 @@ const routes = [
         component: Feed,
       },
       {
-        path: 'profile/:id',
-        name: 'profile',
+        path: 'author/:id',
+        name: 'authorProfile',
         component: Profile,
       },
       {

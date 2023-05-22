@@ -1,7 +1,10 @@
 <template>
   <div class="post-item">
     <div class="author">
-      <router-link :to="'/profile/' + post.author.id" class="author_name">
+      <router-link
+        :to="{ name: 'authorProfile', params: { id: post.author.id } }"
+        class="author_name"
+      >
         <img :src="post.author.avatar" alt="Author Avatar" class="avtar" />
         <span>{{ post.author.name }}</span>
       </router-link>

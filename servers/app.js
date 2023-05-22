@@ -10,26 +10,25 @@ import * as dotenv from "dotenv";
 const app = express();
 dotenv.config({ path: "./local.env" });
 
-const Mongo_URI = `mongodb+srv://duplex-admin:<password>@cluster0.e2sunf7.mongodb.net/${process.env.DB_NAME}`;
-
+const mongoURI =
+  "mongodb+srv://duplex-admin:<password>@cluster0.e2sunf7.mongodb.net";
 mongoose
   .connect(
-    Mongo_URI.replace("duplex-admin", process.env.MONGO_USER).replace(
-      "<password>",
-      process.env.MONGO_PASSWORD
-    ),
+    mongoURI
+      .replace("duplex-admin", process.env.MONGO_USER)
+      .replace("<password>", process.env.MONGO_PASSWORD),
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     }
   )
   .then(() => {
-    console.log("Db Connected");
+    console.log("Connected to MongoDB");
   })
-  .catch((err) => {
-    console.log("Inside");
-    console.log(err);
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error);
   });
+
 //ORIGIN CONFIG
 const corsOptions = {
   origin: ["http://localhost:5173"],

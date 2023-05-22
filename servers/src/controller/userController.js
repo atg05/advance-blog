@@ -79,12 +79,27 @@ export const getUserInfo = async (req, res) => {
     // .populate("following")
     // .populate("pinnedPosts")
     // .populate("pinnedUsers");
-    const allPost = BlogPost.find();
+
+    const fetchPostsByAuthorId = async (authorId) => {
+      try {
+        const posts = await BlogPost.find({ authorId });
+        return posts;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    };
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
+    let userPosts;
+    await fetchPostsByAuthorId(userId).then((posts) => {
+      userPosts = posts;
+    });
+
+    console.log(userPosts);
     // Remove sensitive information like password
     const userInfo = {
       id: user._id,
@@ -92,7 +107,7 @@ export const getUserInfo = async (req, res) => {
       lastName: user.lastName,
       email: user.email,
       avatar: user.avatar,
-      // userPosts: userPosts.data,
+      userPosts,
       likedPosts: user.likedPosts,
       followers: user.followers,
       following: user.following,
