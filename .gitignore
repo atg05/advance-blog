@@ -1,0 +1,15 @@
+node_modules/
+
+# Ignore build output
+/dist/
+/build/
+
+# Ignore log files
+*.log
+
+# Ignore environment variables file
+.env
+
+# Ignore user-specific IDE files
+.idea/
+.vscode/

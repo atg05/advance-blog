@@ -1,0 +1,21 @@
+.side-bar {
+  padding: 2em 0 2em 1.5em;
+  background-color: var(--primary-color);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.icon-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  color: aliceblue;
+  padding: 1em 0 1em 0.5em;
+}
+
+.icon-link:hover {
+  background-color: #002e3f;
+  border-right: 15px solid white;
+  border-radius: 5px;
+}
