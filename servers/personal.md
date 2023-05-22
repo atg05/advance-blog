@@ -1,0 +1,8 @@
+- Red (!) - question
+- Green (\*) -Answer
+- Blue (?) - Info
+- Yellow (^) -Warning
+- Pink (&) -version
+- Purple (~) - History
+- Mustard (todo)
+- Grey (//)

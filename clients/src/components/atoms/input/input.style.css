@@ -1,0 +1,12 @@
+.input-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 2px;
+}
+
+.input-field {
+  height: 30px;
+  border-radius: 2px;
+  padding: 1px;
+}

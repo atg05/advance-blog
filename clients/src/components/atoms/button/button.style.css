@@ -1,0 +1,30 @@
+.btn {
+  /* Your default button styles here */
+  width: 100%;
+  height: 40px;
+  color: aliceblue;
+  transition: all 0.3s ease-in-out;
+  border-radius: 5px;
+}
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.btn-primary {
+  /* Primary button styles here */
+  background-color: var(--primary-color);
+}
+
+.btn-secondary {
+  /* Secondary button styles here */
+}
+
+.btn-small {
+  height: 25px;
+}

@@ -1,0 +1,16 @@
+{
+  "overrides": [
+    {
+      "files": "*.vue",
+      "options": {
+        "parser": "vue"
+      }
+    }
+  ],
+  "semi": true,
+  "tabWidth": 2,
+  "singleQuote": true,
+  "doubleQuote": true,
+  "trailingComma": "all",
+  "arrowParens": "always"
+}
