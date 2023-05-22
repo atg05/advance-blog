@@ -1,0 +1,35 @@
+@import "../../styles/_variable.css";
+
+:root {
+  --primary-color: #00425a;
+  --secondary-color: #6c757d;
+  --font-family: Arial, sans-serif;
+}
+
+.header {
+  grid-column: 1/4;
+  background-color: #00425a;
+  /* border-bottom: 1px solid #fff2f2; */
+  padding: 0.5em 1.5em;
+  display: flex;
+  justify-content: space-between;
+}
+
+.logo-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: aliceblue;
+}
+
+.menu {
+  color: aliceblue;
+  cursor: pointer;
+}
+
+.menu:hover {
+  cursor: wait;
+}
