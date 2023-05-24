@@ -51,7 +51,7 @@ export const getAllPosts = async (req, res) => {
   };
 
   try {
-    let posts = await BlogPost.find();
+    let posts = await BlogPost.find().sort({ _id: -1 });
 
     if (onlyUserPost) {
       fetchPostsByAuthorId(userId)

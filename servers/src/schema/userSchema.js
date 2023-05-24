@@ -3,14 +3,26 @@ import bcrypt from "bcrypt";
 
 // ? Schema will be updated as per need
 
+const randomPic = () => {
+  function getRandomIndex(arrayLength) {
+    return Math.floor(Math.random() * arrayLength);
+  }
+  const avatarUrl = [
+    "https://i.pinimg.com/474x/e7/a9/4b/e7a94b352d281a23d847a13352be652c.jpg",
+    "https://i.pinimg.com/136x136/ef/29/51/ef29513fc46294b48255816fdb386846.jpg",
+    "https://i.pinimg.com/236x/95/9f/98/959f98d1df29da313107964217fd681d.jpg",
+    "https://i.pinimg.com/170x/fd/a0/e5/fda0e512c6df0833edafb98c6f1f5964.jpg",
+  ];
+  return avatarUrl[getRandomIndex(avatarUrl.length)];
+};
+
 const userSchema = new mongoose.Schema(
   {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     avatar: {
       type: String,
-      default:
-        "https://icons-for-free.com/iconfiles/png/512/avatar+human+people+profile+user+icon-1320168139431219590.png",
+      default: randomPic(),
     },
     email: {
       type: String,
@@ -39,16 +51,6 @@ const userSchema = new mongoose.Schema(
 // Hash password before saving to database
 // ! Why I do this?
 // * Because, Password can be easily read by memeber of organisation. Which is not good. That's why i have used bcrypt library so that user's password get converted into hash code.
-
-userSchema.pre("save", async function (next) {
-  try {
-    const hashedPassword = await bcrypt.hash(this.password, 10);
-    this.password = hashedPassword;
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
 
 // ! Whatever model name you are providing inside model name it will be a table in your db in plural form.
 // * User -> users inside your db.

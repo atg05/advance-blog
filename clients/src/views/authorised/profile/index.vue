@@ -4,7 +4,7 @@
       <img :src="userInfo?.avatar" alt="User Profile" class="profile-pic" />
       <div class="info">
         <h1 class="username">
-          {{ userInfo?.firstName + ' ' + userInfo.lastName }}
+          {{ userInfo?.firstName + ' ' + userInfo?.lastName }}
         </h1>
         <div class="card">
           <div class="card-item">
@@ -24,11 +24,11 @@
     </div>
     <div class="posts-container">
       <!-- <Post v-for="post in userInfo?.userPosts" :key="post.id" :post="post" /> -->
-      <template v-if="userInfo?.userPosts?.length > 0">
-        <Post v-for="post in userInfo?.userPosts" :key="post.id" :post="post" />
+      <template v-if="userPosts?.length > 0">
+        <Post v-for="post in userPosts" :key="post.id" :post="post" />
       </template>
       <template v-else>
-        <p>You haven't created any post...</p>
+        <p>User has not created any post yet...</p>
       </template>
     </div>
   </div>
@@ -77,7 +77,17 @@ export default {
           : await axiosClient.get(
               `/post/?onlyUserPost=true&userId=${this.user.id}`,
             );
-        this.userPosts = response.data;
+        this.userPosts = response.data?.filter((data) => {
+          if (this.$route.params.id) {
+            if (data.author.id === this.$route.params.id) {
+              return data;
+            }
+          } else {
+            if (data.author.id === this.user.id) {
+              return data;
+            }
+          }
+        });
       } catch (error) {
         console.log(error);
       }
