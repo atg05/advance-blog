@@ -2,13 +2,13 @@
   <div class="post-item">
     <div class="author">
       <router-link
-        :to="{ name: 'authorProfile', params: { id: post.author.id } }"
+        :to="{ name: 'authorProfile', params: { id: post.author?.id } }"
         class="author_name"
       >
         <img :src="post.author.avatar" alt="Author Avatar" class="avtar" />
         <span>{{ post.author.name }}</span>
       </router-link>
-      <div v-if="post.author.id !== user.id">
+      <div v-if="post.author?.id !== user.id">
         <span
           class="material-symbols-outlined"
           :class="{
@@ -169,7 +169,7 @@ export default {
   },
   created() {
     // Check if the current user is already following the author
-    if (this.post.author.followers?.includes(this.user.id)) {
+    if (this.post?.author?.followers?.includes(this.user.id)) {
       this.isFollowing = true;
     }
   },

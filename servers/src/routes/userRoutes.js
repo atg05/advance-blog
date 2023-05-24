@@ -6,7 +6,6 @@ import {
 } from "../controller/userController.js";
 
 const router = express.Router();
-
 // Define the routes
 router.get("/:userId", getUserInfo);
 router.post("/:userToFollowId/follow", followUser);

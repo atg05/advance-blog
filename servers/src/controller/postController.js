@@ -87,14 +87,6 @@ export const getAllPosts = async (req, res) => {
         liked,
       } = post._doc;
 
-      // // Read the image file and convert it to base64 string
-      // console.log(__dirname);
-      // const imagePath = path.join(__dirname, "../../uploads", featuredImage);
-      // let imageBase64;
-      // if (featuredImage) {
-      //   imageBase64 = fs.readFileSync(imagePath, "base64");
-      // }
-
       return {
         id: _id,
         author,
@@ -247,7 +239,6 @@ export const unlikeBlogPost = async (req, res) => {
 };
 
 export const createComment = async (req, res) => {
-  console.log("Inside Create Comment");
   try {
     const { postId } = req.params;
     const { body } = req.body;

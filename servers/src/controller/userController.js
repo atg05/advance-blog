@@ -5,7 +5,6 @@ import { User } from "../schema/userSchema.js";
 export const followUser = async (req, res) => {
   const { userId } = req.params;
   const { followerId } = req.body;
-  console.log("Inside follow User");
 
   try {
     const user = await User.findById(userId);
@@ -99,20 +98,19 @@ export const getUserInfo = async (req, res) => {
       userPosts = posts;
     });
 
-    console.log(userPosts);
-    // Remove sensitive information like password
     const userInfo = {
       id: user._id,
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
       avatar: user.avatar,
-      userPosts,
       likedPosts: user.likedPosts,
       followers: user.followers,
       following: user.following,
       pinnedPosts: user.pinnedPosts,
+      following: user.following,
       pinnedUsers: user.pinnedUsers,
+      following: user.following,
       createdAt: user.createdAt,
     };
 

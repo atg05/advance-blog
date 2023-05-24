@@ -1,30 +1,30 @@
 <template>
   <div class="profile-container">
     <div class="about">
-      <img :src="userInfo.avatar" alt="User Profile" class="profile-pic" />
+      <img :src="userInfo?.avatar" alt="User Profile" class="profile-pic" />
       <div class="info">
         <h1 class="username">
-          {{ userInfo.firstName + ' ' + userInfo.lastName }}
+          {{ userInfo?.firstName + ' ' + userInfo.lastName }}
         </h1>
         <div class="card">
           <div class="card-item">
             <span class="title">Posts</span>
-            <span>{{ userInfo.userPosts?.length }}</span>
+            <span>{{ userInfo?.userPosts?.length || 0 }}</span>
           </div>
           <div class="card-item">
             <span class="title">Followers</span>
-            <span>{{ userInfo.followers?.length }}</span>
+            <span>{{ userInfo?.followers?.length }}</span>
           </div>
           <div class="card-item">
             <span class="title">Following</span>
-            <span>{{ userInfo.following?.length }}</span>
+            <span>{{ userInfo?.following?.length }}</span>
           </div>
         </div>
       </div>
     </div>
     <div class="posts-container">
       <!-- <Post v-for="post in userInfo?.userPosts" :key="post.id" :post="post" /> -->
-      <template v-if="userInfo?.userPosts.length > 0">
+      <template v-if="userInfo?.userPosts?.length > 0">
         <Post v-for="post in userInfo?.userPosts" :key="post.id" :post="post" />
       </template>
       <template v-else>
@@ -58,11 +58,11 @@ export default {
   },
   methods: {
     async fetchUserInfo() {
-      console.log(this.$route.params.id);
       try {
-        const response = this.$route.params.id
+        const response = this.$route.params?.id
           ? await axiosClient.get(`/user/${this.$route.params.id}`)
           : await axiosClient.get(`/user/${this.user.id}`);
+
         this.userInfo = response.data;
       } catch (error) {
         console.log(error);

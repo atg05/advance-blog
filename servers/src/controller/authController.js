@@ -13,7 +13,8 @@ export const login = async (req, res) => {
     }
 
     // Check if password is correct
-    const isMatch = await bcrypt.compare(password, userData.password);
+    const isMatch = password === userData.password ? true : false;
+
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
@@ -52,7 +53,7 @@ export const logout = async (req, res) => {
 
 export const register = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
-  console.log(req.body);
+
   try {
     await User.create({ firstName, lastName, email, password });
     res.status(200).send("Successfull Registeration");
