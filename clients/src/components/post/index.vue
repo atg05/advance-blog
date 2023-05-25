@@ -47,7 +47,7 @@
         <span class="material-symbols-outlined"> thumb_up </span>
         <span>Like</span>
       </div>
-      <div class="icon-container">
+      <div class="icon-container" @click="toggleComment">
         <span class="material-symbols-outlined"> comment </span>
         <span>Comment</span>
       </div>
@@ -56,6 +56,9 @@
         <span>Share</span>
       </div>
     </div>
+    <div class="comment-box" v-if="this.isCommentActive">
+      <Comment />
+    </div>
   </div>
 </template>
 
@@ -63,6 +66,7 @@
 import { mapGetters, mapState } from 'vuex';
 import store from '../../store';
 import axiosClient from '../../utils/axiosClient';
+import Comment from '../comment/index.vue';
 
 export default {
   name: 'Post',
@@ -72,9 +76,13 @@ export default {
       required: true,
     },
   },
+  components: {
+    Comment,
+  },
   data() {
     return {
       isFollowing: false,
+      isCommentActive: false,
     };
   },
   computed: {
@@ -140,6 +148,9 @@ export default {
         console.log(error);
       }
     },
+    toggleComment() {
+      this.isCommentActive = !this.isCommentActive;
+    },
     async addComment() {
       try {
         const response = await axiosClient.post(
@@ -152,6 +163,7 @@ export default {
         console.log(error);
       }
     },
+
     sharePost() {
       if (navigator.share) {
         navigator
