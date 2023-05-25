@@ -13,7 +13,6 @@
 <script>
 import Post from '../../../components/post/index.vue';
 import Editor from '../../../components/editor/index.vue';
-import axiosClient from '../../../utils/axiosClient';
 import { mapGetters, mapState } from 'vuex';
 import store from '../../../store';
 

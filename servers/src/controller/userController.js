@@ -7,8 +7,12 @@ export const followUser = async (req, res) => {
   const { followerId } = req.body;
 
   try {
+    console.log(userId);
     const user = await User.findById(userId);
     const follower = await User.findById(followerId);
+
+    console.log(userId);
+    console.log(followerId);
 
     if (!user || !follower) {
       return res.status(404).json({ msg: "User not found" });
@@ -118,5 +122,23 @@ export const getUserInfo = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Server error" });
+  }
+};
+
+export const getLikedPosts = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    // Find the user by ID and populate the likedPosts field
+    const user = await BlogPost.findById();
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const likedPosts = user.likedPosts;
+    return res.json({ likedPosts });
+  } catch (error) {
+    console.error("Error retrieving liked posts:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };

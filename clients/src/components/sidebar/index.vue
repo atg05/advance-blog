@@ -9,18 +9,15 @@
       <span class="material-symbols-outlined"> stylus_note </span>
       <span>Write</span>
     </router-link>
-    <router-link to="/user" class="icon-link">
-      <span class="material-symbols-outlined"> person </span>
-      <span>Avinash</span>
+    <router-link to="/fav/post" class="icon-link">
+      <span class="material-symbols-outlined"> favorite </span>
+      <span>Posts</span>
     </router-link>
-    <router-link to="/user" class="icon-link">
-      <span class="material-symbols-outlined"> person </span>
-      <span>Only Avinash</span>
+    <router-link to="/fav/author" class="icon-link">
+      <span class="material-symbols-outlined"> favorite </span>
+      <span>Authors</span>
     </router-link>
-    <router-link to="/user" class="icon-link">
-      <span class="material-symbols-outlined"> person </span>
-      <span>Just Avinash</span>
-    </router-link>
+
     <router-link to="/profile" class="icon-link">
       <span class="material-symbols-outlined"> account_circle </span>
       <span>Profile</span>

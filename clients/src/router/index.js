@@ -5,6 +5,7 @@ import PrimaryLayout from '../views/authorised/index.vue';
 import Profile from '../views/authorised/profile/index.vue';
 import Feed from '../views/authorised/feed/index.vue';
 import Editor from '../components/editor/index.vue';
+import Favorite from '../views/authorised/favorite/index.vue';
 
 const routes = [
   {
@@ -32,6 +33,11 @@ const routes = [
         path: 'editor',
         name: 'editor',
         component: Editor,
+      },
+      {
+        path: 'fav/:type',
+        name: 'fav',
+        component: Favorite,
       },
     ],
   },
