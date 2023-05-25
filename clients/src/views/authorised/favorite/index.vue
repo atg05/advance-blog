@@ -222,12 +222,10 @@ export default {
     ...mapState(['user']),
   },
   async created() {
-    // await axiosClient
-    //   .get(`/user/${this.user.id}/likedPost`)
-    //   .then((response) => {
-    //     console.log(response);
-    //     this.favPosts = response.data;
-    //   });
+    const response = await axiosClient.get(
+      `/post/?onlyLikePost=true&userId=${this.user.id}`,
+    );
+    console.log(response);
   },
 };
 </script>

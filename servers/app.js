@@ -6,9 +6,16 @@ import postRoutes from "./src/routes/postRoutes.js";
 import cors from "cors";
 
 import * as dotenv from "dotenv";
+import { v2 as cloudinary } from "cloudinary";
 
 const app = express();
 dotenv.config({ path: "./local.env" });
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
 
 const mongoURI =
   "mongodb+srv://duplex-admin:<password>@cluster0.e2sunf7.mongodb.net";

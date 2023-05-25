@@ -5,28 +5,31 @@ import path, { dirname } from "path";
 import fs from "fs";
 import { v4 as uuidv4 } from "uuid";
 import Comment from "../schema/commentSchema.js";
+import { uploadToCloudinary } from "../utils/cloudinary.config.js";
 
 // Get the directory path of the current module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export const createPost = async (req, res) => {
-  const { authorId, content } = req.body;
-
+  const { authorId, content, image } = req.body;
+  let newPost;
   try {
-    // Create a new BlogPost object using the request body
-    const newPost = new BlogPost({
-      authorId,
-      content,
-    });
-
-    // Check if there is an uploaded file
     if (req.file) {
-      // Retrieve the unique filename assigned by multer
-      const uniqueFileName = req.file.filename;
-      // Set the unique filename in the featuredImage field
-      newPost.featuredImage = uniqueFileName;
+      const imageUrl = await uploadToCloudinary(req.file);
+      // Create a new blog post with the uploaded image URL
+      newPost = new BlogPost({
+        authorId,
+        content,
+        featuredImage: imageUrl,
+      });
+    } else {
+      newPost = new BlogPost({
+        authorId,
+        content,
+      });
     }
+
     // Save the new post to the database
     const post = await newPost.save();
     // Return the saved post as a JSON response with HTTP status code 201 (Created)
@@ -38,7 +41,7 @@ export const createPost = async (req, res) => {
 };
 
 export const getAllPosts = async (req, res) => {
-  const { userId, onlyUserPost } = req.query;
+  const { userId, onlyUserPost, onlyLikePost } = req.query;
 
   const fetchPostsByAuthorId = async (authorId) => {
     try {
@@ -63,7 +66,8 @@ export const getAllPosts = async (req, res) => {
         });
     }
 
-    const postPromises = posts?.map(async (post) => {
+    let postPromises;
+    postPromises = posts?.map(async (post) => {
       const authorDetails = await User.findById(post.authorId);
       if (post._doc?.likes?.includes(userId)) {
         post._doc.liked = true;
@@ -93,6 +97,7 @@ export const getAllPosts = async (req, res) => {
         comments,
         content,
         featuredImage:
+          featuredImage ||
           "https://images.pexels.com/photos/920382/pexels-photo-920382.jpeg?cs=srgb&dl=pexels-andrea-piacquadio-920382.jpg&fm=jpg",
         privacy,
         tags,
@@ -109,7 +114,7 @@ export const getAllPosts = async (req, res) => {
       };
     });
 
-    const postWithAuthor = await Promise.all(postPromises);
+    let postWithAuthor = await Promise.all(postPromises);
 
     res.json(postWithAuthor);
   } catch (err) {
