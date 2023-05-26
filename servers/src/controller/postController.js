@@ -246,7 +246,7 @@ export const unlikeBlogPost = async (req, res) => {
 export const createComment = async (req, res) => {
   try {
     const { postId } = req.params;
-    const { body } = req.body;
+    const { body, commenterId } = req.body;
 
     // Check if the post exists
     const post = await BlogPost.findById(postId);
@@ -254,17 +254,43 @@ export const createComment = async (req, res) => {
       return res.status(404).json({ error: "Post not found" });
     }
 
-    // Create a new comment using the request body
-    const comment = new Comment({ body });
+    // Check if the user exists
+    const user = await User.findById(commenterId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
 
-    // Save the comment to the database
+    // Create a new comment using the request body
+    const comment = new Comment({ body, postId });
+
+    // Set the commenter's ID and save the comment to the database
+    comment.user = user._id;
     const savedComment = await comment.save();
 
     // Add the comment to the post's comments array
     post.comments.push(savedComment._id);
     await post.save();
 
-    res.status(201).json(savedComment);
+    // Get the comment's creation date in days
+    const creationDate = Math.round(
+      (Date.now() - savedComment.createdAt) / (1000 * 60 * 60 * 24)
+    );
+
+    // Prepare the commenter object with ID, name, and avatar
+    const commenter = {
+      id: user._id,
+      name: user.firstName + user.lastName,
+      avatar: user.avatar,
+    };
+
+    // Prepare the response with the comment body, creation date, and commenter object
+    const response = {
+      body: savedComment.body,
+      creationDate,
+      commenter,
+    };
+
+    res.status(201).json(response);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -274,14 +300,35 @@ export const getCommentsByPostId = async (req, res) => {
   try {
     const { postId } = req.params;
 
-    // Find the post by ID and populate the comments
-    const post = await Post.findById(postId).populate("comments");
-    if (!post) {
-      return res.status(404).json({ error: "Post not found" });
-    }
+    // Find all comments that have the given postId
+    const comments = await Comment.find({ postId }).populate(
+      "user",
+      "firstName lastName avatar"
+    );
 
-    res.json(post.comments);
+    // Prepare the response array
+    const response = comments.map((comment) => {
+      // Get the comment's creation date in days
+      const creationDate = Math.round(
+        (Date.now() - comment.createdAt) / (1000 * 60 * 60 * 24)
+      );
+
+      // Prepare the commenter object with ID, name, and avatar
+      const commenter = {
+        id: comment.user._id,
+        name: `${comment.user.firstName} ${comment.user.lastName}`,
+        avatar: comment.user.avatar,
+      };
+
+      return {
+        body: comment.body,
+        creationDate,
+        commenter,
+      };
+    });
+
+    res.status(200).json(response);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(400).json({ error: error.message });
   }
 };

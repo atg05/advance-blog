@@ -17,7 +17,7 @@
           }"
           @click="post.following ? unfollowUser() : followUser()"
         >
-          {{ post.following ? 'person_remove' : 'person_add' }}
+          {{ post.following ? 'Unfollow' : 'Follow' }}
         </span>
       </div>
     </div>
@@ -57,7 +57,7 @@
       </div>
     </div>
     <div class="comment-box" v-if="this.isCommentActive">
-      <Comment />
+      <Comment :post="post" />
     </div>
   </div>
 </template>

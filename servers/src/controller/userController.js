@@ -77,11 +77,6 @@ export const getUserInfo = async (req, res) => {
 
   try {
     const user = await User.findById(userId);
-    // // .populate("likedPosts")
-    // .populate("followers")
-    // .populate("following")
-    // .populate("pinnedPosts")
-    // .populate("pinnedUsers");
 
     const fetchPostsByAuthorId = async (authorId) => {
       try {

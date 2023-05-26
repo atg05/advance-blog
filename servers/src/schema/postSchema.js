@@ -47,25 +47,8 @@ const blogPostSchema = new mongoose.Schema(
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     comments: [
       {
-        authorName: {
-          type: String,
-          required: true,
-        },
-        authorEmail: {
-          type: String,
-          required: true,
-        },
-        authorAvatar: {
-          type: String,
-        },
-        content: {
-          type: String,
-          required: true,
-        },
-        createdAt: {
-          type: Date,
-          default: Date.now,
-        },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment",
       },
     ],
     privacy: {

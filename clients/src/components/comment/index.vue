@@ -1,25 +1,80 @@
 <template>
   <div class="comment-container">
     <div class="comment-editor-container">
-      <textarea placeholder="Write a comment..." class="comment-editor" />
-      <button class="comment-button">Comment</button>
+      <textarea
+        placeholder="Write a comment..."
+        v-model="commentText"
+        class="comment-editor"
+      />
+      <button class="comment-button" @click="postComment">Comment</button>
     </div>
     <div class="comment-lists">
-      <CommentList /><CommentList /><CommentList /><CommentList />
+      <CommentList
+        v-for="comment in comments"
+        :key="comment._id"
+        :comment="comment"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import CommentList from './CommentList.vue';
+import axiosClient from '../../utils/axiosClient';
+import { mapState } from 'vuex';
 
 export default {
   name: 'Comment',
   components: {
     CommentList,
   },
+  computed: {
+    ...mapState(['user']),
+  },
+  props: {
+    post: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
-    return {};
+    return {
+      commentText: '',
+      comments: [],
+    };
+  },
+  created() {
+    this.fetchComments();
+  },
+  methods: {
+    async fetchComments() {
+      try {
+        const response = await axiosClient.get(
+          `post/${this.post?.id}/comments`,
+        );
+        this.comments = response.data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async postComment() {
+      console.log(this.user);
+      console.log(this.post);
+      try {
+        const response = await axiosClient.post(
+          `post/${this.post?.id}/comments`,
+          {
+            commenterId: this.user?.id,
+            body: this.commentText,
+          },
+        );
+        const savedComment = response.data;
+        this.comments.push(savedComment);
+        this.commentText = ''; // Clear the comment input field
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
 };
 </script>

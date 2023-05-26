@@ -2,16 +2,23 @@
   <div class="comment-list-container">
     <div class="author-container">
       <img
-        src="https://images.pexels.com/photos/675920/pexels-photo-675920.jpeg?cs=srgb&dl=pexels-min-an-675920.jpg&fm=jpg"
+        :src="comment.commenter.avatar"
         class="comment-author-pic"
+        alt="Profile-pic"
       />
       <div class="comment-header-title">
-        <p>Author Name</p>
-        <p>4 days ago</p>
+        <p>{{ comment.commenter.name }}</p>
+        <p class="comment-date">
+          {{
+            comment.creationDate === 0
+              ? 'Today'
+              : `${comment.creationDate}  days ago`
+          }}
+        </p>
       </div>
     </div>
     <div class="comment-content">
-      Content Lorem Ipsum Very Good In nature I love it
+      {{ comment.body }}
     </div>
   </div>
 </template>
@@ -19,9 +26,14 @@
 <script>
 export default {
   name: 'CommentList',
+  props: {
+    comment: {
+      type: Object,
+      required: true,
+    },
+  },
 };
 </script>
-
 <style scoped>
 .comment-list-container {
   padding: 0.5em 1em;
@@ -45,6 +57,11 @@ export default {
 .comment-header-title {
   display: flex;
   flex-direction: column;
+}
+.comment-date {
+  font-size: 10px;
+  font-weight: 200;
+  color: gray;
 }
 .comment-author-pic {
   height: 40px;
