@@ -8,10 +8,6 @@
         </h1>
         <div class="card">
           <div class="card-item">
-            <span class="title">Posts</span>
-            <span>{{ userInfo?.userPosts?.length || 0 }}</span>
-          </div>
-          <div class="card-item">
             <span class="title">Followers</span>
             <span>{{ userInfo?.followers?.length }}</span>
           </div>

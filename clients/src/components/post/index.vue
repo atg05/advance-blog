@@ -10,7 +10,7 @@
       </router-link>
       <div v-if="post.author?.id !== user.id">
         <span
-          class="material-symbols-outlined"
+          class="follow-action"
           :class="{
             'follow-icon': !post.following,
             'unfollow-icon': post.following,

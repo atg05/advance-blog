@@ -301,10 +301,9 @@ export const getCommentsByPostId = async (req, res) => {
     const { postId } = req.params;
 
     // Find all comments that have the given postId
-    const comments = await Comment.find({ postId }).populate(
-      "user",
-      "firstName lastName avatar"
-    );
+    const comments = await Comment.find({ postId })
+      .sort({ createdAt: -1 })
+      .populate("user", "firstName lastName avatar");
 
     // Prepare the response array
     const response = comments.map((comment) => {
