@@ -3,9 +3,10 @@ import { v4 as uuidv4 } from "uuid";
 import {
   createComment,
   createPost,
-  deletePostBySlug,
+  deletePostById,
   getAllPosts,
   getCommentsByPostId,
+  getLikedPosts,
   getPostBySlug,
   likeBlogPost,
   unlikeBlogPost,
@@ -40,12 +41,14 @@ router.get("/:slug", getPostBySlug);
 router.put("/:slug", updatePostBySlug);
 
 // DELETE request to delete a specific blog post by slug
-router.delete("/:slug", deletePostBySlug);
+router.delete("/:postId", deletePostById);
 
 router.post("/:postId/like", likeBlogPost);
 router.post("/:postId/unlike", unlikeBlogPost);
 
 router.post("/:postId/comments", createComment);
 router.get("/:postId/comments", getCommentsByPostId);
+
+router.get("/liked-post/:userId", getLikedPosts);
 
 export default router;

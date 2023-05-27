@@ -13,6 +13,7 @@
   padding-bottom: 0.5em;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
     rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+  position: relative;
 }
 
 .author {
@@ -113,4 +114,41 @@
 
 .liked-post:hover {
   transform: scale(1.1);
+}
+
+.author-actions {
+  display: flex;
+  gap: 0.5em;
+  color: white;
+}
+
+.author-icon:hover {
+  transform: scale(0.8);
+  cursor: pointer;
+}
+
+.download-icon {
+  position: absolute;
+  bottom: 2em;
+  right: 0.3em;
+  background-color: antiquewhite;
+  border-radius: 100%;
+}
+
+.download-icon:hover {
+  cursor: pointer;
+  background-color: transparent;
+  animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }

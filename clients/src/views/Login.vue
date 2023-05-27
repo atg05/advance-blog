@@ -55,7 +55,6 @@ export default {
       await axiosClient
         .post('/auth/login', { email: this.email, password: this.password })
         .then((res) => {
-          console.log(res);
           store.dispatch('login', res.data?.data);
           this.$router.push('/');
         });

@@ -54,13 +54,16 @@ export default {
       }
 
       try {
-        const response = await axiosClient.post('/post', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-
-        console.log('Post submitted successfully:', response.data);
+        const response = await axiosClient
+          .post('/post', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+          .then(() => {
+            this.blog_post = '';
+            this.selectedImage = null;
+          });
       } catch (error) {
         console.error('Error submitting post:', error);
       }
@@ -70,7 +73,6 @@ export default {
     },
     handleFileUpload(event) {
       this.selectedImage = event.target.files[0];
-      console.log('Uploaded file:', this.selectedImage);
     },
   },
 };

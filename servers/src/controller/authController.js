@@ -1,6 +1,5 @@
 // ^ must add .js for every javascript imported file
 import { User } from "../schema/userSchema.js";
-import bcrypt from "bcrypt";
 
 export const login = async (req, res) => {
   const { email, password } = req.body;

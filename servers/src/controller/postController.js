@@ -12,7 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export const createPost = async (req, res) => {
-  const { authorId, content, image } = req.body;
+  const { authorId, content } = req.body;
   let newPost;
   try {
     if (req.file) {
@@ -96,9 +96,7 @@ export const getAllPosts = async (req, res) => {
         author,
         comments,
         content,
-        featuredImage:
-          featuredImage ||
-          "https://images.pexels.com/photos/920382/pexels-photo-920382.jpeg?cs=srgb&dl=pexels-andrea-piacquadio-920382.jpg&fm=jpg",
+        featuredImage: featuredImage,
         privacy,
         tags,
         slug,
@@ -122,8 +120,6 @@ export const getAllPosts = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
-
-export const authorPosts = async (req, res) => {};
 
 // Controller function to READ a specific blog post by slug
 export const getPostBySlug = async (req, res) => {
@@ -166,20 +162,20 @@ export const updatePostBySlug = async (req, res) => {
 };
 
 // Controller function to DELETE a specific blog post by slug
-export const deletePostBySlug = async (req, res) => {
+export const deletePostById = async (req, res) => {
+  const { postId } = req.params;
+
   try {
-    // Find a specific blog post by slug in the database and delete it
-    const post = await BlogPost.findOneAndDelete({ slug: req.params.slug });
-    // If the post is not found, return an error message as a JSON response with HTTP status code 404 (Not Found)
+    const post = await BlogPost.findByIdAndDelete(postId);
+
     if (!post) {
-      res.status(404).json({ error: "Post not found" });
-    } else {
-      // If the post is found and deleted successfully, return a success message as a JSON response
-      res.json({ message: "Post deleted successfully" });
+      return res.status(404).json({ message: "Post not found" });
     }
+
+    res.json({ message: "Post deleted successfully" });
   } catch (error) {
-    // If an error occurs, return an error message as a JSON response with HTTP status code 500 (Internal Server Error)
-    res.status(500).json({ error: error.message });
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
   }
 };
 
@@ -329,5 +325,75 @@ export const getCommentsByPostId = async (req, res) => {
     res.status(200).json(response);
   } catch (error) {
     res.status(400).json({ error: error.message });
+  }
+};
+
+export const getLikedPosts = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const likedPostIds = user.likedPosts;
+
+    // Fetch the liked posts using their IDs
+    const likedPosts = await BlogPost.find({ _id: { $in: likedPostIds } });
+
+    const postPromises = likedPosts.map(async (post) => {
+      const authorDetails = await User.findById(post.authorId);
+
+      // Calculate posted days ago
+      const postedDaysAgo = Math.round(
+        (Date.now() - post.createdAt) / (1000 * 60 * 60 * 24)
+      );
+
+      // Check if the current user is following the author
+      const isFollowing = authorDetails?.followers?.includes(userId);
+
+      const {
+        _id,
+        author,
+        authorId,
+        comments,
+        content,
+        featuredImage,
+        privacy,
+        tags,
+        slug,
+      } = post;
+
+      return {
+        id: _id,
+        author,
+        comments,
+        content,
+        featuredImage: featuredImage,
+        privacy,
+        tags,
+        slug,
+        liked: true,
+        author: {
+          id: authorId,
+          name: `${authorDetails?.firstName} ${authorDetails?.lastName}`,
+          avatar:
+            authorDetails?.avatar ||
+            "https://icons-for-free.com/iconfiles/png/512/avatar+human+people+profile+user+icon-1320168139431219590.png",
+        },
+        following: isFollowing,
+        postedDaysAgo, // Add posted days ago information
+      };
+    });
+
+    const likedPostsWithAuthor = await Promise.all(postPromises);
+
+    return res.json(likedPostsWithAuthor);
+  } catch (error) {
+    console.error("Error retrieving liked posts:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };

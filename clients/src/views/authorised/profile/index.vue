@@ -60,9 +60,7 @@ export default {
           : await axiosClient.get(`/user/${this.user.id}`);
 
         this.userInfo = response.data;
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     },
     async fetchUserPosts() {
       try {

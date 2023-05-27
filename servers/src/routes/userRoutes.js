@@ -1,10 +1,10 @@
 import express from "express";
 import {
   followUser,
-  getLikedPosts,
   getUserInfo,
   unfollowUser,
 } from "../controller/userController.js";
+import { likeBlogPost } from "../controller/postController.js";
 
 const router = express.Router();
 // Define the routes

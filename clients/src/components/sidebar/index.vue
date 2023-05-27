@@ -13,9 +13,13 @@
       <span class="material-symbols-outlined"> favorite </span>
       <span>Posts</span>
     </router-link>
-    <router-link to="/fav/author" class="icon-link">
-      <span class="material-symbols-outlined"> favorite </span>
-      <span>Authors</span>
+    <router-link to="/reading-session" class="icon-link">
+      <span class="material-symbols-outlined"> local_library </span>
+      <span>Reading Session</span>
+    </router-link>
+    <router-link to="/offlined" class="icon-link">
+      <span class="material-symbols-outlined"> download </span>
+      <span>Downloads</span>
     </router-link>
 
     <router-link to="/profile" class="icon-link">

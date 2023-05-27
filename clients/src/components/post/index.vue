@@ -20,6 +20,12 @@
           {{ post.following ? 'Unfollow' : 'Follow' }}
         </span>
       </div>
+      <div v-if="post.author?.id === user.id" class="author-actions">
+        <span class="material-symbols-outlined author-icon"> edit </span>
+        <span class="material-symbols-outlined author-icon" @click="deletePost">
+          delete
+        </span>
+      </div>
     </div>
     <div class="post-body">
       <div class="title" v-if="post.title">{{ post.title }}</div>
@@ -38,6 +44,7 @@
         }}
       </div>
     </div>
+    <span class="material-symbols-outlined download-icon"> download </span>
     <div class="action">
       <div
         class="icon-container"
@@ -162,6 +169,15 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    async deletePost() {
+      await axiosClient
+        .delete(`post/${this.post?.id}`, {
+          userId: this.user.id,
+        })
+        .then(() => {
+          store.dispatch('setPosts', this.user.id);
+        });
     },
 
     sharePost() {

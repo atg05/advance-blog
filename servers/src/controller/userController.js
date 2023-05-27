@@ -119,21 +119,3 @@ export const getUserInfo = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
-
-export const getLikedPosts = async (req, res) => {
-  try {
-    const userId = req.params.userId;
-    // Find the user by ID and populate the likedPosts field
-    const user = await BlogPost.findById();
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    const likedPosts = user.likedPosts;
-    return res.json({ likedPosts });
-  } catch (error) {
-    console.error("Error retrieving liked posts:", error);
-    return res.status(500).json({ message: "Internal server error" });
-  }
-};
