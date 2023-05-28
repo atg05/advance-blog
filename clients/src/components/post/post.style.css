@@ -141,6 +141,10 @@
   animation: bounce 1s infinite;
 }
 
+.reading-icon {
+  bottom: 3.2em;
+}
+
 @keyframes bounce {
   0% {
     transform: translateY(0);

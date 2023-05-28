@@ -1,6 +1,13 @@
 <template>
   <div class="feed_container">
     <!-- <Editor /> -->
+    <div class="filter-container">
+      <TagCard>All</TagCard>
+      <TagCard>Technology</TagCard>
+      <TagCard>Cooking</TagCard>
+      <TagCard>Self-Help</TagCard>
+    </div>
+
     <div v-if="posts.length > 0" class="post-list">
       <div v-for="post in posts" :key="post.id" class="post">
         <Post :post="post" />
@@ -13,6 +20,7 @@
 <script>
 import Post from '../../../components/post/index.vue';
 import Editor from '../../../components/editor/index.vue';
+import TagCard from '../../../components/tags/card.vue';
 import { mapGetters, mapState } from 'vuex';
 import store from '../../../store';
 
@@ -21,6 +29,7 @@ export default {
   components: {
     Post,
     Editor,
+    TagCard,
   },
 
   computed: {
@@ -37,5 +46,9 @@ export default {
 @import './feed.style.css';
 main {
   grid-area: 'main';
+}
+.filter-container {
+  display: flex;
+  gap: 0.5em;
 }
 </style>

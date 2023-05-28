@@ -1,4 +1,4 @@
-@import "../../styles/_variable.css";
+@import '../../styles/_variable.css';
 
 :root {
   --primary-color: #00425a;
@@ -9,10 +9,9 @@
 .header {
   grid-column: 1/4;
   background-color: #00425a;
-  /* border-bottom: 1px solid #fff2f2; */
   padding: 0.5em 1.5em;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .logo-title {
@@ -23,6 +22,7 @@
   font-weight: bold;
   font-size: 1.5rem;
   color: aliceblue;
+  margin-right: 5.2em;
 }
 
 .menu {
@@ -32,4 +32,30 @@
 
 .menu:hover {
   cursor: wait;
+}
+
+.search-bar {
+  color: aliceblue;
+  display: flex;
+  align-items: center;
+  height: 30px;
+  width: auto;
+}
+
+.search-box {
+  height: 100%;
+  border-radius: 10px 0px 0px 10px;
+  width: 50em;
+  padding: 4px;
+}
+.search-icon {
+  height: 90%;
+  padding: 5px;
+  background-color: aliceblue;
+  color: #00425a;
+  font-weight: bold;
+  border-radius: 0px 10px 10px 0px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 }

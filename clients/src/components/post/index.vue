@@ -45,6 +45,9 @@
       </div>
     </div>
     <span class="material-symbols-outlined download-icon"> download </span>
+    <span class="material-symbols-outlined download-icon reading-icon">
+      local_library
+    </span>
     <div class="action">
       <div
         class="icon-container"

@@ -5,6 +5,11 @@
 
       <span>Write-Pad</span>
     </div>
+    <div class="search-bar">
+      <input type="text" placeholder="Search..." class="search-box" />
+      <span class="material-symbols-outlined search-icon">search</span>
+    </div>
+
     <!-- <div class="menu">
       <span class="material-symbols-outlined"> menu </span>
     </div> -->
@@ -13,10 +18,10 @@
 
 <script>
 export default {
-  name: "Header",
+  name: 'Header',
 };
 </script>
 
 <style scoped>
-@import "./header.style.css";
+@import './header.style.css';
 </style>
