@@ -6,4 +6,8 @@ export function setPosts(state, posts) {
   state.posts = posts;
 }
 
-export default { setUser, setPosts };
+export function saveToSession(state, { key, data }) {
+  state.sessionData = data;
+}
+
+export default { setUser, setPosts, saveToSession };

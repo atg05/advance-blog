@@ -44,11 +44,21 @@
         }}
       </div>
     </div>
-    <span class="material-symbols-outlined download-icon"> download </span>
-    <span class="material-symbols-outlined download-icon reading-icon">
+    <span
+      v-if="!isOfflineRoute"
+      class="material-symbols-outlined download-icon"
+      @click="savePostToLocalStorage"
+    >
+      download
+    </span>
+    <span
+      v-if="!isReadingSession"
+      class="material-symbols-outlined download-icon reading-icon"
+      @click="savePostToSession"
+    >
       local_library
     </span>
-    <div class="action">
+    <div class="action" v-if="!isReadingSession && !isOfflineRoute">
       <div
         class="icon-container"
         :class="{ 'liked-post': post.liked }"
@@ -66,7 +76,13 @@
         <span>Share</span>
       </div>
     </div>
-    <div class="comment-box" v-if="this.isCommentActive">
+    <div
+      class="comment-box"
+      v-if="
+        (this.isCommentActive && !isReadingSession) ||
+        (this.isCommentActive && !isOfflineRoute)
+      "
+    >
       <Comment :post="post" />
     </div>
   </div>
@@ -98,6 +114,12 @@ export default {
   computed: {
     ...mapState(['user']),
     ...mapGetters(['getAllPosts']),
+    isReadingSession() {
+      return this.$route.path?.includes('reading-session');
+    },
+    isOfflineRoute() {
+      return this.$route.path?.includes('offlined');
+    },
   },
   methods: {
     async followUser() {
@@ -195,6 +217,24 @@ export default {
           .catch((error) => console.error('Error sharing:', error));
       } else {
         console.log('Web Share API not supported.');
+      }
+    },
+    savePostToSession() {
+      this.$store.dispatch('saveToSession', { post: this.post });
+    },
+    savePostToLocalStorage() {
+      const currentUserId = this.user.id;
+      let storedPosts = JSON.parse(localStorage.getItem(currentUserId)) || [];
+      const postExists = storedPosts.some(
+        (storedPost) => storedPost.id === this.post.id,
+      );
+
+      if (!postExists) {
+        storedPosts.push(this.post);
+        localStorage.setItem(currentUserId, JSON.stringify(storedPosts));
+        alert('Post downloaded');
+      } else {
+        alert('Post already downloaded!');
       }
     },
   },

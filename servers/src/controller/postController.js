@@ -12,7 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export const createPost = async (req, res) => {
-  const { authorId, content } = req.body;
+  const { authorId, content, category } = req.body;
   let newPost;
   try {
     if (req.file) {
@@ -22,11 +22,13 @@ export const createPost = async (req, res) => {
         authorId,
         content,
         featuredImage: imageUrl,
+        tags: [category], // Add category to the tags array
       });
     } else {
       newPost = new BlogPost({
         authorId,
         content,
+        tags: [category], // Add category to the tags array
       });
     }
 

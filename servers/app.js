@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import userRoutes from "./src/routes/userRoutes.js";
 import authRoutes from "./src/routes/authRoutes.js";
 import postRoutes from "./src/routes/postRoutes.js";
+import categoryRoutes from "./src/routes/categoriesRoutes.js";
 import cors from "cors";
 
 import * as dotenv from "dotenv";
@@ -54,6 +55,7 @@ app.use(`${baseApi}/user`, userRoutes);
 app.use(`${baseApi}/auth`, authRoutes);
 // app.use(`${baseApi}`)
 app.use(`${baseApi}/post`, postRoutes);
+app.use(`${baseApi}/categories`, categoryRoutes);
 
 app.get(`/health`, (req, res) => {
   res.status(200).send("Working");
