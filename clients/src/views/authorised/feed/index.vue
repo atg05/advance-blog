@@ -2,14 +2,17 @@
   <div class="feed_container">
     <!-- <Editor /> -->
     <div class="filter-container">
-      <TagCard>All</TagCard>
-      <TagCard>Technology</TagCard>
-      <TagCard>Cooking</TagCard>
-      <TagCard>Self-Help</TagCard>
+      <TagCard @click="filterPostsByTag(null)">All</TagCard>
+      <TagCard
+        v-for="tag in uniqueTags"
+        :key="tag"
+        @click="filterPostsByTag(tag)"
+        >{{ tag }}</TagCard
+      >
     </div>
 
-    <div v-if="posts.length > 0" class="post-list">
-      <div v-for="post in posts" :key="post.id" class="post">
+    <div v-if="filteredPosts.length > 0" class="post-list">
+      <div v-for="post in filteredPosts" :key="post.id" class="post">
         <Post :post="post" />
       </div>
     </div>
@@ -21,7 +24,7 @@
 import Post from '../../../components/post/index.vue';
 import Editor from '../../../components/editor/index.vue';
 import TagCard from '../../../components/tags/card.vue';
-import { mapGetters, mapState } from 'vuex';
+import { mapState } from 'vuex';
 import store from '../../../store';
 
 export default {
@@ -32,10 +35,39 @@ export default {
     TagCard,
   },
 
+  data() {
+    return {
+      selectedTag: null,
+    };
+  },
+
   computed: {
     ...mapState(['user', 'posts']),
-    ...mapGetters(['getAllPosts']), // Import the user state from Vuex
+    uniqueTags() {
+      const tagsSet = new Set();
+      this.posts.forEach((post) => {
+        post.tags.forEach((tag) => {
+          tagsSet.add(tag);
+        });
+      });
+      return Array.from(tagsSet);
+    },
+    filteredPosts() {
+      if (this.selectedTag) {
+        return this.posts.filter((post) =>
+          post.tags.includes(this.selectedTag),
+        );
+      }
+      return this.posts;
+    },
   },
+
+  methods: {
+    filterPostsByTag(tag) {
+      this.selectedTag = tag;
+    },
+  },
+
   async created() {
     store.dispatch('setPosts', this.user.id);
   },
