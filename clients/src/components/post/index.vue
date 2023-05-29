@@ -2,25 +2,25 @@
   <div class="post-item">
     <div class="author">
       <router-link
-        :to="{ name: 'authorProfile', params: { id: post.author?.id } }"
+        :to="{ name: 'authorProfile', params: { id: data.author?.id } }"
         class="author_name"
       >
-        <img :src="post.author.avatar" alt="Author Avatar" class="avtar" />
-        <span>{{ post.author.name }}</span>
+        <img :src="data.author.avatar" alt="Author Avatar" class="avtar" />
+        <span>{{ data.author.name }}</span>
       </router-link>
-      <div v-if="post.author?.id !== user.id">
+      <div v-if="data.author?.id !== user.id">
         <span
           class="follow-action"
           :class="{
-            'follow-icon': !post.following,
-            'unfollow-icon': post.following,
+            'follow-icon': !data.following,
+            'unfollow-icon': data.following,
           }"
-          @click="post.following ? unfollowUser() : followUser()"
+          @click="data.following ? unfollowUser() : followUser()"
         >
-          {{ post.following ? 'Unfollow' : 'Follow' }}
+          {{ data.following ? 'Unfollow' : 'Follow' }}
         </span>
       </div>
-      <div v-if="post.author?.id === user.id" class="author-actions">
+      <div v-if="data.author?.id === user.id" class="author-actions">
         <span class="material-symbols-outlined author-icon"> edit </span>
         <span class="material-symbols-outlined author-icon" @click="deletePost">
           delete
@@ -28,19 +28,19 @@
       </div>
     </div>
     <div class="post-body">
-      <div class="title" v-if="post.title">{{ post.title }}</div>
+      <div class="title" v-if="data.title">{{ data.title }}</div>
 
       <img
-        v-if="post.featuredImage"
-        :src="post.featuredImage"
+        v-if="data.featuredImage"
+        :src="data.featuredImage"
         alt="Featured Image"
         class="featured-image"
       />
       <div class="content">
         {{
-          post.content.split(' ').length > 150
-            ? post.content.split(' ').slice(0, 100).join(' ') + '...'
-            : post.content
+          data.content.split(' ').length > 150
+            ? data.content.split(' ').slice(0, 100).join(' ') + '...'
+            : data.content
         }}
       </div>
     </div>
@@ -61,7 +61,7 @@
     <div class="action" v-if="!isReadingSession && !isOfflineRoute">
       <div
         class="icon-container"
-        :class="{ 'liked-post': post.liked }"
+        :class="{ 'liked-post': data.liked }"
         @click="likePost"
       >
         <span class="material-symbols-outlined"> thumb_up </span>
@@ -105,8 +105,10 @@ export default {
   components: {
     Comment,
   },
+
   data() {
     return {
+      data: {},
       isFollowing: false,
       isCommentActive: false,
     };
@@ -125,7 +127,7 @@ export default {
     async followUser() {
       try {
         await axiosClient
-          .post(`/user/${this.post.author.id}/follow`, {
+          .post(`/user/${this.data.author.id}/follow`, {
             followerId: this.user.id,
           })
           .then(() => {
@@ -139,7 +141,7 @@ export default {
     async unfollowUser() {
       try {
         await axiosClient
-          .post(`/user/${this.post.author.id}/unfollow`, {
+          .post(`/user/${this.data.author.id}/unfollow`, {
             followerId: this.user.id,
           })
           .then(() => {
@@ -151,7 +153,7 @@ export default {
       }
     },
     async likePost() {
-      if (this.post.liked) {
+      if (this.data.liked) {
         this.unlikePost();
       } else {
         try {
@@ -209,8 +211,8 @@ export default {
       if (navigator.share) {
         navigator
           .share({
-            title: this.post.title,
-            text: this.post.content,
+            title: this.data.title,
+            text: this.data.content,
             url: window.location.href,
           })
           .then(() => console.log('Shared successfully.'))
@@ -226,7 +228,7 @@ export default {
       const currentUserId = this.user.id;
       let storedPosts = JSON.parse(localStorage.getItem(currentUserId)) || [];
       const postExists = storedPosts.some(
-        (storedPost) => storedPost.id === this.post.id,
+        (storedPost) => storedPost.id === this.data.id,
       );
 
       if (!postExists) {
@@ -238,10 +240,16 @@ export default {
       }
     },
   },
-  created() {
+  async created() {
     // Check if the current user is already following the author
     if (this.post?.author?.followers?.includes(this.user.id)) {
       this.isFollowing = true;
+    }
+    if (this.$route.path?.includes('post')) {
+      const response = await axiosClient.get(`/post/${this.$route.params.id}`);
+      this.data = response.data;
+    } else {
+      this.data = this.post;
     }
   },
 };

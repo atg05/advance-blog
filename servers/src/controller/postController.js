@@ -399,3 +399,52 @@ export const getLikedPosts = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const getBlogById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const blog = await BlogPost.findById(id);
+
+    if (!blog) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+
+    const authorDetails = await User.findById(blog.authorId);
+    const {
+      _id,
+      author,
+      comments,
+      content,
+      featuredImage,
+      privacy,
+      tags,
+      slug,
+    } = blog;
+
+    const isFollowing = authorDetails?.followers?.includes(req.userId);
+    const postWithAuthor = {
+      id: _id,
+      author,
+      comments,
+      content,
+      featuredImage: featuredImage,
+      privacy,
+      tags,
+      slug,
+      liked: blog.likes.includes(req.userId),
+      author: {
+        id: authorDetails?.id,
+        name: `${authorDetails?.firstName} ${authorDetails?.lastName}`,
+        avatar:
+          authorDetails?.avatar || "https://example.com/default-avatar.png",
+      },
+      following: isFollowing,
+    };
+
+    res.status(200).json(postWithAuthor);
+  } catch (error) {
+    console.error("Error fetching blog:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

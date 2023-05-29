@@ -5,6 +5,7 @@ import {
   createPost,
   deletePostById,
   getAllPosts,
+  getBlogById,
   getCommentsByPostId,
   getLikedPosts,
   getPostBySlug,
@@ -30,6 +31,8 @@ const upload = multer({ storage });
 
 // Define the route for creating a new blog post
 router.post("/", upload.single("image"), createPost);
+
+router.get("/:id", getBlogById);
 
 // GET request to fetch all blog posts
 router.get("/", getAllPosts);

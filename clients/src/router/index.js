@@ -4,6 +4,7 @@ import Register from '../views/Register.vue';
 import PrimaryLayout from '../views/authorised/index.vue';
 import Profile from '../views/authorised/profile/index.vue';
 import Feed from '../views/authorised/feed/index.vue';
+import Post from '../components/post/index.vue';
 import Editor from '../components/editor/index.vue';
 import Favorite from '../views/authorised/favorite/index.vue';
 import Offlined from '../views/authorised/offlined/index.vue';
@@ -20,6 +21,11 @@ const routes = [
         path: '',
         name: 'feed',
         component: Feed,
+      },
+      {
+        path: 'post/:id',
+        name: 'post',
+        component: Post,
       },
       {
         path: 'author/:id',
