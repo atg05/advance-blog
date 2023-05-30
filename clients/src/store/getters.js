@@ -1,6 +1,5 @@
 export default {
   isAuthenticated(state) {
-    console.log(state.user);
     return state.user || null;
   },
   getUserInfo(state) {

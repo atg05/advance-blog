@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema(
   {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
+    role: { type: String, required: true, default: "user" },
     avatar: {
       type: String,
       default: randomPic(),
@@ -35,6 +36,7 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: 6,
     },
+    isBanned: { type: Boolean, default: false },
     likedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: "BlogPost" }],
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],

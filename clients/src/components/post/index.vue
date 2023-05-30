@@ -8,7 +8,7 @@
         <img :src="data.author.avatar" alt="Author Avatar" class="avtar" />
         <span>{{ data.author.name }}</span>
       </router-link>
-      <div v-if="data.author?.id !== user.id">
+      <div v-if="data.author?.id !== user.id && this.user.role !== 'admin'">
         <span
           class="follow-action"
           :class="{
@@ -18,6 +18,11 @@
           @click="data.following ? unfollowUser() : followUser()"
         >
           {{ data.following ? 'Unfollow' : 'Follow' }}
+        </span>
+      </div>
+      <div class="author-actions" v-if="this.user.role === 'admin'">
+        <span class="material-symbols-outlined author-icon" @click="deletePost">
+          delete
         </span>
       </div>
       <div v-if="data.author?.id === user.id" class="author-actions">

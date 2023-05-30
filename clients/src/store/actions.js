@@ -14,7 +14,6 @@ export function logout({ commit, rootState }) {
 }
 
 export function setUserInfo({ commit }, data) {
-  console.log(data);
   commit('setUser', data);
 }
 

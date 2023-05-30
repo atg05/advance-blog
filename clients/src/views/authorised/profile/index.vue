@@ -1,6 +1,23 @@
 <template>
-  <div class="profile-container">
-    <div class="about">
+  <div :class="['profile-container']">
+    <div v-if="this.user?.role === 'admin'">
+      <span
+        v-if="!this.userInfo?.isBanned"
+        class="material-symbols-outlined ban-user"
+        @click="banUser"
+      >
+        person_off
+      </span>
+      <span
+        v-if="this.userInfo?.isBanned"
+        class="material-symbols-outlined ban-user unban"
+        @click="unBanUser"
+      >
+        verified_user
+      </span>
+    </div>
+
+    <div :class="['about', { banned_profile: this.userInfo?.isBanned }]">
       <img :src="userInfo?.avatar" alt="User Profile" class="profile-pic" />
       <div class="info">
         <h1 class="username">
@@ -19,7 +36,6 @@
       </div>
     </div>
     <div class="posts-container">
-      <!-- <Post v-for="post in userInfo?.userPosts" :key="post.id" :post="post" /> -->
       <template v-if="userPosts?.length > 0">
         <Post v-for="post in userPosts" :key="post.id" :post="post" />
       </template>
@@ -31,7 +47,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapState } from 'vuex';
 import Post from '../../../components/post/index.vue';
 import axiosClient from '../../../utils/axiosClient';
 
@@ -45,8 +61,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['user', 'posts']),
-    ...mapGetters(['getAllPosts']), // Import the user state from Vuex
+    ...mapState(['user']),
   },
   created() {
     this.fetchUserInfo();
@@ -60,7 +75,9 @@ export default {
           : await axiosClient.get(`/user/${this.user.id}`);
 
         this.userInfo = response.data;
-      } catch (error) {}
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      }
     },
     async fetchUserPosts() {
       try {
@@ -83,7 +100,37 @@ export default {
           }
         });
       } catch (error) {
-        console.log(error);
+        console.error('Error fetching user posts:', error);
+      }
+    },
+    async banUser() {
+      try {
+        const userId = this.$route.params?.id || this.user.id;
+
+        await axiosClient.put(`/user/${userId}/ban`).then(async () => {
+          await this.fetchUserInfo();
+        });
+
+        console.log('User banned successfully');
+        // Show a success message or perform any necessary actions after banning the user
+      } catch (error) {
+        console.error('Failed to ban user:', error);
+        // Handle the error case, show an error message, etc.
+      }
+    },
+    async unBanUser() {
+      try {
+        const userId = this.$route.params?.id || this.user.id;
+
+        await axiosClient.put(`/user/${userId}/unban`).then(async () => {
+          await this.fetchUserInfo();
+        });
+
+        console.log('User unbanned successfully');
+        // Show a success message or perform any necessary actions after unbanning the user
+      } catch (error) {
+        console.error('Failed to unban user:', error);
+        // Handle the error case, show an error message, etc.
       }
     },
   },

@@ -7,12 +7,8 @@ export const followUser = async (req, res) => {
   const { followerId } = req.body;
 
   try {
-    console.log(userId);
     const user = await User.findById(userId);
     const follower = await User.findById(followerId);
-
-    console.log(userId);
-    console.log(followerId);
 
     if (!user || !follower) {
       return res.status(404).json({ msg: "User not found" });
@@ -103,6 +99,7 @@ export const getUserInfo = async (req, res) => {
       lastName: user.lastName,
       email: user.email,
       avatar: user.avatar,
+      isBanned: user.isBanned,
       likedPosts: user.likedPosts,
       followers: user.followers,
       following: user.following,

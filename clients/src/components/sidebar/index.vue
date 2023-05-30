@@ -2,7 +2,8 @@
   <aside class="side-bar">
     <router-link to="/" class="icon-link">
       <span class="material-symbols-outlined"> feed </span>
-      <span>Home</span>
+      <span v-if="this.user.role != 'admin'">Home</span>
+      <span v-else-if="this.user.role === 'admin'">Post Report</span>
     </router-link>
 
     <router-link to="/editor" class="icon-link">
@@ -39,9 +40,13 @@
 </template>
 
 <script>
+import { mapGetters, mapState } from 'vuex';
 import store from '../../store';
 export default {
   name: 'Sidebar',
+  computed: {
+    ...mapState(['user']),
+  },
   methods: {
     logout() {
       store.dispatch('logout');

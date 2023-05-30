@@ -2,6 +2,9 @@
   <div class="container">
     <span class="material-symbols-outlined user_account"> account_circle </span>
     <h1>Login</h1>
+    <span v-if="this.errorMessage != ''" class="banned-user">{{
+      this.errorMessage
+    }}</span>
     <form @submit.prevent="loginUser" class="form-container">
       <InputField
         label="Email"
@@ -48,6 +51,7 @@ export default {
     return {
       email: '',
       password: '',
+      errorMessage: '',
     };
   },
   methods: {
@@ -56,7 +60,11 @@ export default {
         .post('/auth/login', { email: this.email, password: this.password })
         .then((res) => {
           store.dispatch('login', res.data?.data);
+          this.errorMessage = '';
           this.$router.push('/');
+        })
+        .catch((err) => {
+          this.errorMessage = err.response.data.message;
         });
       // Send login request to server
     },
@@ -104,5 +112,8 @@ input {
 button {
   width: 100%;
   background-color: var(--primary-color);
+}
+.banned-user {
+  color: red;
 }
 </style>

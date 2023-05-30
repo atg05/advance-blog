@@ -1,3 +1,25 @@
+.profile-container {
+  position: relative;
+}
+.banned_profile {
+  background-color: #ff4d4d;
+}
+
+.ban-user {
+  position: absolute;
+  top: 0.8em;
+  right: 5em;
+  font-size: 40px;
+  cursor: pointer;
+  color: red;
+}
+.ban-user:hover {
+  transform: scale(1.5);
+  font-weight: bold;
+}
+.unban {
+  color: green;
+}
 .about {
   width: auto;
   /* border: 1px solid red; */

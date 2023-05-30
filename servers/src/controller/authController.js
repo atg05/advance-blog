@@ -11,6 +11,11 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
+    // Check if user is banned
+    if (userData.isBanned) {
+      return res.status(401).json({ message: "User is banned. Cannot login." });
+    }
+
     // Check if password is correct
     const isMatch = password === userData.password ? true : false;
 
@@ -25,6 +30,7 @@ export const login = async (req, res) => {
       following,
       pinnedPosts,
       pinnedUsers,
+      role,
     } = userData;
 
     res.status(200).send({
@@ -34,6 +40,7 @@ export const login = async (req, res) => {
         firstName,
         lastName,
         email,
+        role,
         followers,
         following,
         pinnedPosts,

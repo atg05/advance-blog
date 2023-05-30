@@ -20,7 +20,6 @@ export default {
   },
   created() {
     const userInfo = localStorage.getItem('userInfo');
-
     store.dispatch('setUserInfo', JSON.parse(userInfo));
   },
 };

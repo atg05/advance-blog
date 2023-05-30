@@ -50,7 +50,6 @@ export default {
           if (tag !== '') tagsSet.add(tag);
         });
       });
-      console.log(tagsSet);
       return Array.from(tagsSet);
     },
     filteredPosts() {

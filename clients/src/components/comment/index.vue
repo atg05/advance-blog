@@ -58,8 +58,6 @@ export default {
       }
     },
     async postComment() {
-      console.log(this.user);
-      console.log(this.post);
       try {
         const response = await axiosClient.post(
           `post/${this.post?.id}/comments`,
