@@ -9,6 +9,7 @@
 import PrimaryLayout from './views/authorised/index.vue';
 import Login from './views/Login.vue';
 import Register from './views/Register.vue';
+import store from './store/index.js';
 
 export default {
   name: 'App',
@@ -16,6 +17,11 @@ export default {
     PrimaryLayout,
     Register,
     Login,
+  },
+  created() {
+    const userInfo = localStorage.getItem('userInfo');
+
+    store.dispatch('setUserInfo', JSON.parse(userInfo));
   },
 };
 </script>

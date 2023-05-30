@@ -47,9 +47,10 @@ export default {
       const tagsSet = new Set();
       this.posts.forEach((post) => {
         post.tags.forEach((tag) => {
-          tagsSet.add(tag);
+          if (tag !== '') tagsSet.add(tag);
         });
       });
+      console.log(tagsSet);
       return Array.from(tagsSet);
     },
     filteredPosts() {

@@ -4,11 +4,18 @@ import axiosClient from '../utils/axiosClient.js';
 export function login({ commit }, data) {
   commit('setUser', data);
   localStorage.setItem('isAuthenticated', true);
+  localStorage.setItem('userInfo', JSON.stringify(data));
 }
 export function logout({ commit, rootState }) {
   sessionStorage.removeItem(rootState.user.id);
   commit('setUser', {});
   localStorage.removeItem('isAuthenticated');
+  localStorage.removeItem('userInfo');
+}
+
+export function setUserInfo({ commit }, data) {
+  console.log(data);
+  commit('setUser', data);
 }
 
 function setPosts({ commit }, userId) {
@@ -34,4 +41,4 @@ export function saveToSession({ commit, rootState }, { post }) {
   }
 }
 
-export default { login, logout, setPosts, saveToSession };
+export default { login, logout, setPosts, saveToSession, setUserInfo };
